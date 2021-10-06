@@ -1,9 +1,9 @@
-void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, Int_t A, Int_t P_beam)
+void FragmentationInput_com(char* input_dirname, char* output_dirname, Int_t files, Int_t A, Int_t P_beam)
 {
 	TChain* fChain=new TChain("events");
-    fChain->Add(Form("%s/mcini_Au2_12AGeV_20k_noMST.root", input_dirname));
+    fChain->Add(Form("%s/mcini_Au2_4.936GeV_20k_withMST.root", input_dirname));
 
-    TFile* ReadFile = new TFile("../input/Au2_12AGeV_20k_noMST.root");
+    TFile* ReadFile = new TFile("../input/Au2_4.936GeV_20k_withMST.root");
 
     cout<<"Numer of entries equal "<<fChain->GetEntries()<<endl;
     UEvent* fEvent = new UEvent;
@@ -31,19 +31,19 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
     TH2F* hEcc4_vs_B =                new TH2F ("Ecc4_VS_B", ";#epsilon_{4};B, fm",200,0,1,200,0,20);
     
     TH1F* hNfrag =                              new TH1F("A_Fragments",";Mass number of fragments;counts",200,0,200);
-    TH1F* hEnergy =                             new TH1F("Energy",";E_{event}, GeV;counts",250,0,3500);
-    TH1F* hP =                                  new TH1F("P_nucleon",";P, GeV;counts",400,0,40);
-    TH1F* hRapidity =                           new TH1F("Y_nucleon",";Rapidity;counts",500,0,5);
-    TH1F* hPseudoRapidity =                     new TH1F("Eta_nucleon",";Pseudorapidity;counts",180,0,18);
+    TH1F* hEnergy =                             new TH1F("Energy",";E_{event}, GeV;counts",250,0,800);
+    TH1F* hP =                                  new TH1F("P_nucleon",";P, GeV;counts",400,0,8);
+    TH1F* hRapidity =                           new TH1F("Y_nucleon",";Rapidity;counts",500,0,3);
+    TH1F* hPseudoRapidity =                     new TH1F("Eta_nucleon",";Pseudorapidity;counts",180,0,15);
     TH2F* hNprotons_vs_Nneutrons =              new TH2F("Nprotons_VS_Nneutrons",";N in fragment;Z in fragment",120,0,120,80,0,80);
     TH2F* hNfrag_vs_ImpactParameter =           new TH2F("A_VS_B",";Mass number of fragments;b, fm",200,0,200,200,0,20);
-    TH2F* hNfrag_vs_Energy =                    new TH2F("A_VS_E",";Mass number of fragments;E_{frag}, GeV",200,0,200,150,0,3000);
+    TH2F* hNfrag_vs_Energy =                    new TH2F("A_VS_E",";Mass number of fragments;E_{frag}, GeV",200,0,200,150,0,800);
     TH2F* hNfrag_vs_Energy_scaled =             new TH2F("A_VS_E_scaled",";Mass number of fragments;E_{frag}-E_{beam}(A-1), GeV",200,0,200,150,-100,200);
     TH2F* hNfrag_vs_Rapidity =                  new TH2F("A_VS_Y",";Mass number of fragments;Rapidity",200,0,200,500,0,5);
-    TH2F* hImpactParameter_vs_Energy_Fragment = new TH2F("B_VS_E",";b, fm;E_{event}, GeV",200,0,20,250,0,3000);
-    TH2F* hImpactParameter_vs_Rapidity =        new TH2F("B_VS_Y",";b, fm;Rapidity",200,0,20,250,0,5);
-    TH2F* hRapidity_vs_Energy =                 new TH2F("Y_VS_E",";E, GeV;Rapidity",250,0,3500,250,0,5);
-    TH2F* hPseudoRapidity_vs_A =                new TH2F("Eta_VS_A",";Pseudorapidity;A",180,0,18,200,0,200);
+    TH2F* hImpactParameter_vs_Energy_Fragment = new TH2F("B_VS_E",";b, fm;E_{event}, GeV",200,0,20,250,0,800);
+    TH2F* hImpactParameter_vs_Rapidity =        new TH2F("B_VS_Y",";b, fm;Rapidity",200,0,20,250,0,3);
+    TH2F* hRapidity_vs_Energy =                 new TH2F("Y_VS_E",";E, GeV;Rapidity",250,0,800,250,0,3);
+    TH2F* hPseudoRapidity_vs_A =                new TH2F("Eta_VS_A",";Pseudorapidity;A",180,0,15,200,0,200);
     TH2F* hPx_vs_Py =                           new TH2F("Py_VS_Px",";Px, GeV;Py, GeV",200,0,5,200,0,5);
     
     //TH3F* hImpactParameter_Nfrag_vs_Energy_scaled = new TH3F("B_VS_A_VS_E_scaled",";b, fm;Mass number of fragments;E-E_{beam}(A-1), GeV",200,0,20,200,0,200,200,0,20);
@@ -167,10 +167,10 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
     Double_t EnergyProj, EnergyTarg, Energy_frag;
     Int_t sumZ_proj, sumZ_targ;
 
-    TH2F* hEnergyA_vs_ImpactParameter_proj =          new TH2F("EperA_VS_B_proj",";b, fm;E_{frag}/A, GeV",200,0,20,200,0,30);
-    TH2F* hEnergyA_vs_ImpactParameter_targ =          new TH2F("EperA_VS_B_targ",";b, fm;E_{frag}/A, GeV",200,0,20,200,0,4);
-    TH2F* hNspect_vs_Espect_proj =          new TH2F("Espect_VS_Nspect_proj",";Nspect;Espect, GeV",100,0,100,150,0,3300);
-    TH2F* hNspect_vs_Espect_targ =          new TH2F("Espect_VS_Nspect_targ",";Nspect;Espect, GeV",100,0,100,150,0,300);
+    TH2F* hEnergyA_vs_ImpactParameter_proj =          new TH2F("EperA_VS_B_proj",";b, fm;E_{frag}/A, GeV",200,0,20,200,0,8);
+    TH2F* hEnergyA_vs_ImpactParameter_targ =          new TH2F("EperA_VS_B_targ",";b, fm;E_{frag}/A, GeV",200,0,20,200,0,8);
+    TH2F* hNspect_vs_Espect_proj =          new TH2F("Espect_VS_Nspect_proj",";Nspect;Espect, GeV",100,0,100,150,0,800);
+    TH2F* hNspect_vs_Espect_targ =          new TH2F("Espect_VS_Nspect_targ",";Nspect;Espect, GeV",100,0,100,150,0,800);
     TH2F* hNspect_vs_sumZ_proj =          new TH2F("sumZ_VS_Nspect_proj",";sumZ;Nspect",80,0,80,110,0,110);
     TH2F* hNspect_vs_sumZ_targ =          new TH2F("sumZ_VS_Nspect_targ",";sumZ;Nspect",80,0,80,110,0,110);
     
@@ -179,13 +179,13 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
     TH2F* hNnucl_vs_Nfrag_proj =          new TH2F("Nnucl_vs_Nfrag_proj",";Nfrag;Nnucl",30,0,30,90,0,90);
     TH2F* hNnucl_vs_Nfrag_targ =          new TH2F("Nnucl_vs_Nfrag_targ",";Nfrag;Nnucl",30,0,30,90,0,90);
 
-    TH2F* hEnergyE_vs_sumZ_proj =          new TH2F("EnergyE_VS_sumZ_proj",";sumZ;E_{event}, GeV",80,0,80,175,0,3500);
-    TH2F* hEnergyE_vs_Nnucl_proj =          new TH2F("EnergyE_VS_Nnucl_proj",";Nnucl;E_{event}, GeV",90,0,90,175,0,3500);
-    TH2F* hEnergyE_vs_Nimf_proj =          new TH2F("EnergyE_VS_Nimf_proj",";N_{IMF};E_{event}, GeV",15,0,15,35,0,3500);
+    TH2F* hEnergyE_vs_sumZ_proj =          new TH2F("EnergyE_VS_sumZ_proj",";sumZ;E_{event}, GeV",80,0,80,175,0,800);
+    TH2F* hEnergyE_vs_Nnucl_proj =          new TH2F("EnergyE_VS_Nnucl_proj",";Nnucl;E_{event}, GeV",90,0,90,175,0,800);
+    TH2F* hEnergyE_vs_Nimf_proj =          new TH2F("EnergyE_VS_Nimf_proj",";N_{IMF};E_{event}, GeV",15,0,15,30,0,800);
 
-    TH2F* hEnergyProj_vs_EnergyTarg        =          new TH2F("E_proj_VS_E_targ",";E_{event} (target), GeV;E_{event} (projectile), GeV",150,0,300,150,0,3000);
-    TH2F* hImpactParameter_vs_Energy_targ  =       new TH2F("B_VS_Energy_targ",";b, fm;E_{event} (target), GeV",200,0,20,250,0,300);
-    TH2F* hImpactParameter_vs_Energy_proj  =       new TH2F("B_VS_Energy_proj",";b, fm;E_{event} (projectile), GeV",200,0,20,250,0,3000);
+    TH2F* hEnergyProj_vs_EnergyTarg        =          new TH2F("E_proj_VS_E_targ",";E_{event} (target), GeV;E_{event} (projectile), GeV",150,0,800,150,0,800);
+    TH2F* hImpactParameter_vs_Energy_targ  =       new TH2F("B_VS_Energy_targ",";b, fm;E_{event} (target), GeV",200,0,20,250,0,800);
+    TH2F* hImpactParameter_vs_Energy_proj  =       new TH2F("B_VS_Energy_proj",";b, fm;E_{event} (projectile), GeV",200,0,20,250,0,800);
 
 
 
@@ -249,120 +249,122 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
     gPad->SetTickx();
     gPad->SetTicky();
     hImpactParameter           ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf(");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf(");
 
     gPad->SetLogz();
 
-    
+   
     hEnergyE_vs_sumZ_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hEnergyE_vs_Nnucl_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hEnergyE_vs_Nimf_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
 
     gStyle -> SetOptStat(1000100001);
+     hEnergyA_vs_ImpactParameter_targ ->Draw("COLZ");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hEnergyA_vs_ImpactParameter_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hEnergyA_vs_ImpactParameter_targ ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hEnergyProj_vs_EnergyTarg ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     
     hNspect_vs_sumZ_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNspect_vs_sumZ_targ ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
+ 
     
     hNspect_vs_Espect_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNspect_vs_Espect_targ ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    gStyle -> SetOptStat(1000000001);
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
 
+    gStyle -> SetOptStat(1000000001);
+    
     hImpactParameter_vs_Energy_targ ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hImpactParameter_vs_Energy_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
 
         hNspectT_vs_NspectP ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
         hNsumZT_vs_NsumZP ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
         hNnucl_vs_Nfrag_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
         hNnucl_vs_Nfrag_targ ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
    
 
 
     /*hNpart                     ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNspec                     ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNcoll                     ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNpart_vs_ImpactParameter  ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNspec_vs_ImpactParameter  ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNcoll_vs_ImpactParameter  ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNspec_vs_Npart            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNspec_vs_Ncoll            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNpart_vs_Ncoll            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hEcc1_vs_B                 ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hEcc2_vs_B                 ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hEcc3_vs_B                 ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hEcc4_vs_B                 ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");*/
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");*/
     
     gPad->SetLogy();
     hNfrag                               ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     gPad->SetLogy(0);
     hEnergy                              ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     gPad->SetLogy();
     hP                                   ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hRapidity                            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     gPad->SetLogy(0);
     hNprotons_vs_Nneutrons               ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hNfrag_vs_ImpactParameter            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
 
     hNfrag_vs_Energy                     ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     //hNfrag_vs_Energy_scaled              ->Draw("COLZ");
-    //canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    //canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
 
     hNfrag_vs_Rapidity                   ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
 
     //hImpactParameter_vs_Energy           ->Draw("COLZ");
-    //canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    //canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
 
     hImpactParameter_vs_Energy_Fragment  ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hImpactParameter_vs_Rapidity         ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hRapidity_vs_Energy                  ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hPx_vs_Py                            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hPseudoRapidity                      ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf");
     hPseudoRapidity_vs_A                 ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf)");
+    canvas->Print("../output/histos/Au2_4.936GeV_20k_withMST.pdf)");
        
 
     TFile *fout = new TFile(output_dirname, "recreate");
