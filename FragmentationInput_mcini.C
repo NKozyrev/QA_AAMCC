@@ -1,9 +1,9 @@
-void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, Int_t A, Int_t P_beam)
+void FragmentationInput_mcini(char* input_dirname, char* output_dirname, Int_t files, Int_t A, Int_t P_beam)
 {
 	TChain* fChain=new TChain("events");
-    fChain->Add(Form("%s/mcini_Au2_12AGeV_20k_noMST.root", input_dirname));
-
-    TFile* ReadFile = new TFile("../input/Au2_12AGeV_20k_noMST.root");
+    fChain->Add(Form("%s/mcini_auau_Ablaxx_option_12AGeV.root", input_dirname));
+    //for (int i = 1; i <= files; i++) {fChain->Add(Form("%s/dcmqgsm_%d.root", input_dirname, i));}
+    //TFile* ReadFile = new TFile("../input/QA_abla_opt.root");
 
     cout<<"Numer of entries equal "<<fChain->GetEntries()<<endl;
     UEvent* fEvent = new UEvent;
@@ -31,10 +31,20 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
     TH2F* hEcc4_vs_B =                new TH2F ("Ecc4_VS_B", ";#epsilon_{4};B, fm",200,0,1,200,0,20);
     
     TH1F* hNfrag =                              new TH1F("A_Fragments",";Mass number of fragments;counts",200,0,200);
-    TH1F* hEnergy =                             new TH1F("Energy",";E_{event}, GeV;counts",250,0,3500);
-    TH1F* hP =                                  new TH1F("P_nucleon",";P, GeV;counts",400,0,40);
+    TH1F* hEnergy =                             new TH1F("Energy",";E_{event}, GeV;counts",100,2200,2400);
+    TH1F* hP =                                  new TH1F("P",";P/A, GeV;counts",400,0,40);
+    TH1F* hPz =                                 new TH1F("P_z",";Pz/A, GeV;counts",400,0,40);
+    TH1F* hPTnucl =                             new TH1F("Pt_nucl",";P_{t}, GeV;counts",100,0,1);
+    TH2F* hPT_vs_A =                            new TH2F("Pt_vs_A",";P_{t}, GeV;A",100,0,3,198,0,197);
+    TH1F* hPznucl =                             new TH1F("P_z_nucleons",";Pz/A, GeV;counts",400,0,40);
+    TH1F* hPnucl =                              new TH1F("P_nucleons",";Pz/A, GeV;counts",400,0,40);
+    TH1F* hPimf =                               new TH1F("P_imf",";P/A, GeV;counts",400,0,40);
+    TH1F* hPheavy =                             new TH1F("P_heavy",";P/A, GeV;counts",400,0,40);
+    TH1F* hPzimf =                              new TH1F("P_z_imf",";Pz/A, GeV;counts",400,0,40);
+    TH1F* hPzheavy =                            new TH1F("P_z_heavy",";Pz/A, GeV;counts",400,0,40);
     TH1F* hRapidity =                           new TH1F("Y_nucleon",";Rapidity;counts",500,0,5);
-    TH1F* hPseudoRapidity =                     new TH1F("Eta_nucleon",";Pseudorapidity;counts",180,0,18);
+    TH1F* hPseudoRapidity =                     new TH1F("Eta",";Pseudorapidity;counts",180,0,18);
+    TH1F* hPseudoRapidity_nucl =                new TH1F("Eta_nucl",";Pseudorapidity (Z=1);counts",180,0,18);
     TH2F* hNprotons_vs_Nneutrons =              new TH2F("Nprotons_VS_Nneutrons",";N in fragment;Z in fragment",120,0,120,80,0,80);
     TH2F* hNfrag_vs_ImpactParameter =           new TH2F("A_VS_B",";Mass number of fragments;b, fm",200,0,200,200,0,20);
     TH2F* hNfrag_vs_Energy =                    new TH2F("A_VS_E",";Mass number of fragments;E_{frag}, GeV",200,0,200,150,0,3000);
@@ -45,6 +55,28 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
     TH2F* hRapidity_vs_Energy =                 new TH2F("Y_VS_E",";E, GeV;Rapidity",250,0,3500,250,0,5);
     TH2F* hPseudoRapidity_vs_A =                new TH2F("Eta_VS_A",";Pseudorapidity;A",180,0,18,200,0,200);
     TH2F* hPx_vs_Py =                           new TH2F("Py_VS_Px",";Px, GeV;Py, GeV",200,0,5,200,0,5);
+
+    TH2F* hEnergyA_vs_ImpactParameter_proj =          new TH2F("EperA_VS_B_proj",";b, fm;E_{frag}/A, GeV",200,0,20,200,0,30);
+    //TH2F* hEnergyA_vs_ImpactParameter_targ =          new TH2F("EperA_VS_B_targ",";b, fm;E_{frag}/A, GeV",200,0,20,200,0,4);
+    TH2F* hNspect_vs_Espect_proj =          new TH2F("Espect_VS_Nspect_proj",";Nspect;Espect, GeV",100,0,100,150,0,3300);
+    //TH2F* hNspect_vs_Espect_targ =          new TH2F("Espect_VS_Nspect_targ",";Nspect;Espect, GeV",100,0,100,150,0,300);
+    TH2F* hNspect_vs_sumZ_proj =          new TH2F("sumZ_VS_Nspect_proj",";sumZ;Nspect",80,0,80,110,0,110);
+    TH2F* hNspect_vs_Zb2 =          new TH2F("Zb3_VS_Nspect_proj",";Zb3;Nspect",80,0,80,100,0,100);
+    //TH2F* hNspect_vs_sumZ_targ =          new TH2F("sumZ_VS_Nspect_targ",";sumZ;Nspect",80,0,80,110,0,110);
+    
+    //TH2F* hNspectT_vs_NspectP =          new TH2F("Nspect_proj_VS_Nspect_targ",";Nspect(target);Nspect(projectile)",110,0,110,110,0,110);
+    //TH2F* hNsumZT_vs_NsumZP =          new TH2F("sumZ_proj_VS_sumZ_targ",";sumZ(target);sumZ(projectile)",80,0,80,80,0,80);
+    TH2F* hNnucl_vs_Nfrag_proj =          new TH2F("Nnucl_vs_Nfrag_proj",";Nfrag;Nnucl",40,0,40,90,0,90);
+    //TH2F* hNnucl_vs_Nfrag_targ =          new TH2F("Nnucl_vs_Nfrag_targ",";Nfrag;Nnucl",30,0,30,90,0,90);
+
+    TH2F* hEnergyE_vs_sumZ_proj =          new TH2F("EnergyE_VS_sumZ_proj",";sumZ;E_{event}, GeV",80,0,80,175,0,3500);
+    TH2F* hEnergyE_vs_Nnucl_proj =          new TH2F("EnergyE_VS_Nnucl_proj",";Nnucl;E_{event}, GeV",90,0,90,175,0,3500);
+    TH2F* hEnergyE_vs_Nimf_proj =          new TH2F("EnergyE_VS_Nimf_proj",";N_{IMF};E_{event}, GeV",15,0,15,35,0,3500);
+
+    //TH2F* hEnergyProj_vs_EnergyTarg        =          new TH2F("E_proj_VS_E_targ",";E_{event} (target), GeV;E_{event} (projectile), GeV",150,0,300,150,0,3000);
+    //TH2F* hImpactParameter_vs_Energy_targ  =       new TH2F("B_VS_Energy_targ",";b, fm;E_{event} (target), GeV",200,0,20,250,0,300);
+    TH2F* hImpactParameter_vs_Energy  =       new TH2F("B_VS_Energy_proj",";b, fm;E_{event} (projectile), GeV",200,0,20,250,0,3000);
+
     
     //TH3F* hImpactParameter_Nfrag_vs_Energy_scaled = new TH3F("B_VS_A_VS_E_scaled",";b, fm;Mass number of fragments;E-E_{beam}(A-1), GeV",200,0,20,200,0,200,200,0,20);
         
@@ -57,26 +89,33 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
     if (P_beam == 3) px_beam=0., py_beam=0., pz_beam=3.300000, E_beam=3.430721;
     else if (P_beam == 12) px_beam=0., py_beam=0., pz_beam=12.0, E_beam=12.036604;
     else px_beam=0., py_beam=0., pz_beam=1.0, E_beam=1.372;
-
+    TLorentzVector Beam(px_beam, py_beam, pz_beam, E_beam);
+    TLorentzVector Target(0., 0., 0, 0.938);
+    TLorentzRotation rTransform;
+    rTransform.Boost((Beam + Target).BoostVector()); 
             
 	for (long i = 0; i < lNEvents; i++)
 	{
 		if (i % 100 == 0) cout<<i<<endl;
         fChain->GetEntry(i);
         fEnergy=0;
+        Int_t sumZ = 0, Zb2 = 0, fNnucl = 0, fNfrag = 0, fNimf = 0, fNspect = 0;
         fNpa = fEvent->GetNpa();
 
         for (int j=0;j<fNpa;j++)
         {
             fParticle = fEvent->GetParticle(j);
             TLorentzVector fMomentum = fParticle->GetMomentum();
-            
+            //TLorentzVector fMomentum = (fParticle->GetMomentum()).Transform(rTransform);
+            if (fParticle -> T() == 1)
+            {
             if (fParticle->GetPdg()>1e9) 
             {
                 hNprotons_vs_Nneutrons                  ->Fill(fParticle->GetPdg()/10%1000-fParticle->GetPdg()/10000%1000,fParticle->GetPdg()/10000%1000);
                 hNfrag                                  ->Fill(fParticle->GetPdg()/10%1000);
                 hNfrag_vs_ImpactParameter               ->Fill(fParticle->GetPdg()/10%1000, fEvent->GetB());
                 hNfrag_vs_Energy                        ->Fill(fParticle->GetPdg()/10%1000, fMomentum.E());
+                hEnergyA_vs_ImpactParameter_proj        ->Fill(fEvent->GetB(), fMomentum.E()/(fParticle->GetPdg()/10%1000));
                 //hImpactParameter_Nfrag_vs_Energy_scaled ->Fill(fEvent->GetB(), fParticle->GetPdg()/10%1000, fMomentum.E()-E_beam*(fParticle->GetPdg()/10%1000-1));
                 hNfrag_vs_Energy_scaled                 ->Fill(fParticle->GetPdg()/10%1000, fMomentum.E()-E_beam*(fParticle->GetPdg()/10%1000-1));
                 hNfrag_vs_Rapidity                      ->Fill(fParticle->GetPdg()/10%1000, fMomentum.Rapidity());
@@ -84,11 +123,26 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
                 hImpactParameter_vs_Rapidity            ->Fill(fEvent->GetB(), fMomentum.Rapidity());
                 hPx_vs_Py                               ->Fill(fMomentum.Px(), fMomentum.Py());
                 hRapidity_vs_Energy                     ->Fill(fMomentum.E(), fMomentum.Rapidity());
-                hP                                      ->Fill(fMomentum.P()-P_beam*(fParticle->GetPdg()/10%1000-1));
+                hP                                      ->Fill(fMomentum.P()/(fParticle->GetPdg()/10%1000));
+                hPz                                     ->Fill(fMomentum.Pz()/(fParticle->GetPdg()/10%1000));
+                hPT_vs_A                                -> Fill (pow(fMomentum.Px()*fMomentum.Px() + fMomentum.Py()*fMomentum.Py(),0.5), fParticle->GetPdg()/10%1000);
                 hRapidity                               ->Fill(fMomentum.Rapidity());
                 hPseudoRapidity                         ->Fill(fMomentum.PseudoRapidity());
                 hPseudoRapidity_vs_A                    ->Fill(fMomentum.PseudoRapidity(),fParticle->GetPdg()/10%1000);
                 fEnergy=fEnergy+fMomentum.E();
+                sumZ+=fParticle->GetPdg()/10000%1000;
+                if (fParticle->GetPdg()/10000%1000 > 2) Zb2+=fParticle->GetPdg()/10000%1000;
+                if (fParticle->GetPdg()/10000%1000 < 80 && fParticle->GetPdg()/10000%1000 < 198) fNfrag+=1;
+                if (fParticle->GetPdg()/10000%1000 < 80 && fParticle->GetPdg()/10000%1000 < 198) fNspect+=1;
+                if ( fParticle->GetPdg()/10000%1000 <= 30 && fParticle->GetPdg()/10000%1000 >=3){
+                    fNimf+=1;
+                    hPimf->Fill(fMomentum.P()/(fParticle->GetPdg()/10%1000));
+                    hPzimf->Fill(fMomentum.Pz()/(fParticle->GetPdg()/10%1000));
+                }
+                if (fParticle->GetPdg()/10000%1000 > 30) {
+                    hPheavy->Fill(fMomentum.P()/(fParticle->GetPdg()/10%1000)); 
+                    hPzheavy->Fill(fMomentum.Pz()/(fParticle->GetPdg()/10%1000)); 
+                }
             }       
             else if (fParticle->GetPdg()==2212) 
             {
@@ -97,6 +151,7 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
                 hNfrag_vs_ImpactParameter               ->Fill(1, fEvent->GetB());
                 hNfrag_vs_Energy                        ->Fill(1, fMomentum.E());
                 hNfrag_vs_Rapidity                      ->Fill(1, fMomentum.Rapidity());
+                hEnergyA_vs_ImpactParameter_proj        ->Fill(fEvent->GetB(), fMomentum.E());
                 //hImpactParameter_Nfrag_vs_Energy_scaled ->Fill(fEvent->GetB(), 1, fMomentum.E());
                 hNfrag_vs_Energy_scaled                 ->Fill(1, fMomentum.E());
                 hImpactParameter_vs_Rapidity            ->Fill(fEvent->GetB(), fMomentum.Rapidity());
@@ -104,11 +159,21 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
                 hPx_vs_Py                               ->Fill(fMomentum.Px(), fMomentum.Py());
                 hRapidity_vs_Energy                     ->Fill(fMomentum.E(), fMomentum.Rapidity());                
                 hP                                      ->Fill(fMomentum.P());
+                hPz                                      ->Fill(fMomentum.Pz());
+                hPTnucl     -> Fill (pow( fMomentum.Px()*fMomentum.Px() + fMomentum.Py()*fMomentum.Py(),0.5));
+                hPT_vs_A                                -> Fill (pow(fMomentum.Px()*fMomentum.Px() + fMomentum.Py()*fMomentum.Py(),0.5), fParticle->GetPdg()/10%1000);
+
+                hPnucl                                  ->Fill(fMomentum.P());
+                hPznucl                                  ->Fill(fMomentum.Pz());
                 hRapidity                               ->Fill(fMomentum.Rapidity());
                 hPseudoRapidity                         ->Fill(fMomentum.PseudoRapidity());
+                //hPseudoRapidity_nucl                    ->Fill(fMomentum.PseudoRapidity());
                 hPseudoRapidity_vs_A                    ->Fill(fMomentum.PseudoRapidity(),1);
 
                 fEnergy=fEnergy+fMomentum.E();
+                sumZ+=1;
+                fNnucl +=1;
+                fNspect+=1;
             }
             else if (fParticle->GetPdg()==2112) 
             {
@@ -116,6 +181,7 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
                 hNfrag                                  ->Fill(1);
                 hNfrag_vs_ImpactParameter               ->Fill(1, fEvent->GetB());
                 hNfrag_vs_Energy                        ->Fill(1, fMomentum.E());
+                hEnergyA_vs_ImpactParameter_proj        ->Fill(fEvent->GetB(), fMomentum.E());
                 //hImpactParameter_Nfrag_vs_Energy_scaled ->Fill(fEvent->GetB(), 1, fMomentum.E());
                 hNfrag_vs_Energy_scaled                 ->Fill(1, fMomentum.E());
                 hNfrag_vs_Rapidity                      ->Fill(1, fMomentum.Rapidity());
@@ -124,16 +190,34 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
                 hPx_vs_Py                               ->Fill(fMomentum.Px(), fMomentum.Py());
                 hRapidity_vs_Energy                     ->Fill(fMomentum.E(), fMomentum.Rapidity());
                 hP                                      ->Fill(fMomentum.P());
+                hPz                                      ->Fill(fMomentum.Pz());
+                hPTnucl     -> Fill (pow( fMomentum.Px()*fMomentum.Px() + fMomentum.Py()*fMomentum.Py(),0.5));
+                hPT_vs_A                                -> Fill (pow(fMomentum.Px()*fMomentum.Px() + fMomentum.Py()*fMomentum.Py(),0.5), fParticle->GetPdg()/10%1000);
+
+                hPnucl                                  ->Fill(fMomentum.P());
+                hPznucl                                  ->Fill(fMomentum.Pz());
                 hRapidity                               ->Fill(fMomentum.Rapidity());
                 hPseudoRapidity                         ->Fill(fMomentum.PseudoRapidity());
+                hPseudoRapidity_nucl                    ->Fill(fMomentum.PseudoRapidity());
                 hPseudoRapidity_vs_A                    ->Fill(fMomentum.PseudoRapidity(),1);
                 fEnergy=fEnergy+fMomentum.E();
+                fNnucl+=1;
+                fNspect+=1;
+            }
             }
         }
         
         
+        hNspect_vs_Espect_proj        ->Fill(fNspect, fEnergy);
+        hNspect_vs_sumZ_proj          ->Fill(sumZ, fNspect);
+        hNspect_vs_Zb2                ->Fill(Zb2, fNspect);
+        hNnucl_vs_Nfrag_proj          ->Fill (fNfrag, fNnucl);
+        hEnergyE_vs_sumZ_proj         ->Fill (sumZ, fEnergy);
+        hEnergyE_vs_Nnucl_proj        ->Fill (fNnucl, fEnergy);
+        hEnergyE_vs_Nimf_proj         ->Fill (fNimf, fEnergy);
+
         hEnergy                       ->Fill(fEnergy);
-        //hImpactParameter_vs_Energy    ->Fill(fEnergy, fEvent->GetB());
+        hImpactParameter_vs_Energy    ->Fill(fEvent->GetB(), fEnergy);
         hImpactParameter              ->Fill(fEvent->GetB());
         hNpart                        ->Fill(fIniState->getNPart());
         hNspec                        ->Fill(A-fIniState->getNPart());
@@ -144,231 +228,141 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
         hNspec_vs_Npart               ->Fill(A-fIniState->getNPart(), fIniState->getNPart());
         hNspec_vs_Ncoll               ->Fill(A-fIniState->getNPart(), fIniState->getNColl());
         hNpart_vs_Ncoll               ->Fill(fIniState->getNPart(), fIniState->getNColl());
-
-        const Float_t * Ecc = fEvent -> GetEcc();
-        hEcc1_vs_B                    ->Fill(Ecc[1], fEvent->GetB());
-        hEcc2_vs_B                    ->Fill(Ecc[2], fEvent->GetB());
-        hEcc3_vs_B                    ->Fill(Ecc[3], fEvent->GetB());
-        hEcc4_vs_B                    ->Fill(Ecc[4], fEvent->GetB());
 		
 	}
-
-    std::vector<Double_t>* MassOnSideA = 0;
-    std::vector<Double_t>* MassOnSideB = 0;
-    std::vector<Double_t>* ChargeOnSideA = 0;
-    std::vector<Double_t>* ChargeOnSideB = 0;
-    std::vector<Double_t>* pXonSideA = 0;
-    std::vector<Double_t>* pYonSideA = 0;
-    std::vector<Double_t>* pZonSideA = 0;
-    std::vector<Double_t>* pXonSideB = 0;
-    std::vector<Double_t>* pYonSideB = 0;
-    std::vector<Double_t>* pZonSideB = 0;
-    Float_t b;
-    Double_t EnergyProj, EnergyTarg, Energy_frag;
-    Int_t sumZ_proj, sumZ_targ;
-
-    TH2F* hEnergyA_vs_ImpactParameter_proj =          new TH2F("EperA_VS_B_proj",";b, fm;E_{frag}/A, GeV",200,0,20,200,0,30);
-    TH2F* hEnergyA_vs_ImpactParameter_targ =          new TH2F("EperA_VS_B_targ",";b, fm;E_{frag}/A, GeV",200,0,20,200,0,4);
-    TH2F* hNspect_vs_Espect_proj =          new TH2F("Espect_VS_Nspect_proj",";Nspect;Espect, GeV",100,0,100,150,0,3300);
-    TH2F* hNspect_vs_Espect_targ =          new TH2F("Espect_VS_Nspect_targ",";Nspect;Espect, GeV",100,0,100,150,0,300);
-    TH2F* hNspect_vs_sumZ_proj =          new TH2F("sumZ_VS_Nspect_proj",";sumZ;Nspect",80,0,80,110,0,110);
-    TH2F* hNspect_vs_sumZ_targ =          new TH2F("sumZ_VS_Nspect_targ",";sumZ;Nspect",80,0,80,110,0,110);
-    
-    TH2F* hNspectT_vs_NspectP =          new TH2F("Nspect_proj_VS_Nspect_targ",";Nspect(target);Nspect(projectile)",110,0,110,110,0,110);
-    TH2F* hNsumZT_vs_NsumZP =          new TH2F("sumZ_proj_VS_sumZ_targ",";sumZ(target);sumZ(projectile)",80,0,80,80,0,80);
-    TH2F* hNnucl_vs_Nfrag_proj =          new TH2F("Nnucl_vs_Nfrag_proj",";Nfrag;Nnucl",30,0,30,90,0,90);
-    TH2F* hNnucl_vs_Nfrag_targ =          new TH2F("Nnucl_vs_Nfrag_targ",";Nfrag;Nnucl",30,0,30,90,0,90);
-
-    TH2F* hEnergyE_vs_sumZ_proj =          new TH2F("EnergyE_VS_sumZ_proj",";sumZ;E_{event}, GeV",80,0,80,175,0,3500);
-    TH2F* hEnergyE_vs_Nnucl_proj =          new TH2F("EnergyE_VS_Nnucl_proj",";Nnucl;E_{event}, GeV",90,0,90,175,0,3500);
-    TH2F* hEnergyE_vs_Nimf_proj =          new TH2F("EnergyE_VS_Nimf_proj",";N_{IMF};E_{event}, GeV",15,0,15,35,0,3500);
-
-    TH2F* hEnergyProj_vs_EnergyTarg        =          new TH2F("E_proj_VS_E_targ",";E_{event} (target), GeV;E_{event} (projectile), GeV",150,0,300,150,0,3000);
-    TH2F* hImpactParameter_vs_Energy_targ  =       new TH2F("B_VS_Energy_targ",";b, fm;E_{event} (target), GeV",200,0,20,250,0,300);
-    TH2F* hImpactParameter_vs_Energy_proj  =       new TH2F("B_VS_Energy_proj",";b, fm;E_{event} (projectile), GeV",200,0,20,250,0,3000);
-
-
-
-    TTree *tree = (TTree*) ReadFile->Get("Glauber");  
-    tree->SetBranchAddress("A_on_A", &MassOnSideA);
-    tree->SetBranchAddress("A_on_B", &MassOnSideB);
-    tree->SetBranchAddress("Z_on_A", &ChargeOnSideA); 
-    tree->SetBranchAddress("Z_on_B", &ChargeOnSideB);
-    tree->SetBranchAddress("pX_on_A", &pXonSideA);
-    tree->SetBranchAddress("pY_on_A", &pYonSideA);
-    tree->SetBranchAddress("pZ_on_A", &pZonSideA);
-    tree->SetBranchAddress("pX_on_B", &pXonSideB);
-    tree->SetBranchAddress("pY_on_B", &pYonSideB);
-    tree->SetBranchAddress("pZ_on_B", &pZonSideB);
-    tree->SetBranchAddress("impact_parameter", &b);
-
-    for(int k = 0; k < tree->GetEntries(); k++){
-        tree->GetEntry(k);
-        EnergyProj=0; EnergyTarg=0; sumZ_proj =0; sumZ_targ=0;
-        int Nucl_T=0, Frag_T=0,Nucl_P=0, Frag_P=0, IMF_P=0, IMF_T=0;
-        for (Int_t ipart = 0; ipart < (MassOnSideA->size()); ipart++){
-            Energy_frag = pow(pow(pXonSideA->at(ipart) / 1000, 2) + pow(pYonSideA->at(ipart) / 1000, 2) + pow(pZonSideA->at(ipart) / 1000, 2) + pow(0.9395654 * (MassOnSideA->at(ipart) - ChargeOnSideA->at(ipart)) + 0.9382721 * ChargeOnSideA->at(ipart), 2), 0.5);
-            hEnergyA_vs_ImpactParameter_proj -> Fill(b, Energy_frag/MassOnSideA->at(ipart));
-            if (MassOnSideA->at(ipart) == 1) Nucl_P+=1;
-            else Frag_P+=1;
-            if (ChargeOnSideA->at(ipart) >= 3 && ChargeOnSideA->at(ipart) <= 30) IMF_P+=1;
-            if (Energy_frag/MassOnSideA->at(ipart) > 17) cout << "A = " << MassOnSideA->at(ipart) << "; Z = " << ChargeOnSideA->at(ipart) << "; Pz[MeV] = " << pZonSideA->at(ipart) <<"; Pt[MeV]= " << pow (pow (pYonSideA->at(ipart),2) + pow (pXonSideA->at(ipart),2), 0.5) <<endl;
-            EnergyProj+=Energy_frag;
-            sumZ_proj+=ChargeOnSideA->at(ipart);
-
-        }
-        for (Int_t ipart = 0; ipart < (MassOnSideB->size()); ipart++){
-            hEnergyA_vs_ImpactParameter_targ -> Fill(b, pow(pow(pXonSideB->at(ipart) / 1000, 2) + pow(pYonSideB->at(ipart) / 1000, 2) + pow(pZonSideB->at(ipart) / 1000, 2) + pow(0.9395654 * (MassOnSideB->at(ipart) - ChargeOnSideB->at(ipart)) + 0.9382721 * ChargeOnSideB->at(ipart), 2), 0.5)/MassOnSideB->at(ipart));
-            if (MassOnSideB->at(ipart) == 1) Nucl_T+=1;
-            else Frag_T+=1;
-            if (ChargeOnSideB->at(ipart) >= 3 && ChargeOnSideB->at(ipart) <= 30) IMF_T+=1;
-            EnergyTarg+=pow(pow(pXonSideB->at(ipart) / 1000, 2) + pow(pYonSideB->at(ipart) / 1000, 2) + pow(pZonSideB->at(ipart) / 1000, 2) + pow(0.9395654 * (MassOnSideB->at(ipart) - ChargeOnSideB->at(ipart)) + 0.9382721 * ChargeOnSideB->at(ipart), 2), 0.5);
-            sumZ_targ+=ChargeOnSideB->at(ipart);
-        }
-        hEnergyProj_vs_EnergyTarg -> Fill (EnergyTarg, EnergyProj);
-        hNspect_vs_Espect_proj -> Fill (MassOnSideA->size(), EnergyProj);
-        hNspect_vs_Espect_targ -> Fill (MassOnSideB->size(), EnergyTarg);
-        hNspect_vs_sumZ_proj -> Fill (sumZ_proj, MassOnSideA->size());
-        hNspect_vs_sumZ_targ -> Fill (sumZ_targ, MassOnSideB->size());
-        hImpactParameter_vs_Energy_proj -> Fill (b, EnergyProj);
-        hImpactParameter_vs_Energy_targ -> Fill (b, EnergyTarg);
-
-        hEnergyE_vs_sumZ_proj -> Fill (sumZ_proj, EnergyProj);
-        hEnergyE_vs_Nnucl_proj -> Fill (Nucl_P, EnergyProj);
-        hEnergyE_vs_Nimf_proj -> Fill (IMF_P, EnergyProj);
-
-        hNspectT_vs_NspectP -> Fill (MassOnSideB->size(), MassOnSideA->size());
-        hNsumZT_vs_NsumZP -> Fill (sumZ_targ, sumZ_proj);
-        hNnucl_vs_Nfrag_proj -> Fill (Frag_P, Nucl_P);
-        hNnucl_vs_Nfrag_targ -> Fill (Frag_T, Nucl_T);
-    }
-
 
 
     TCanvas* canvas = new TCanvas("canvas");
     gPad->SetTickx();
     gPad->SetTicky();
     hImpactParameter           ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf(");
+    canvas->Print("../output/histos/QA_abla_opt.pdf(");
 
     gPad->SetLogz();
 
     
     hEnergyE_vs_sumZ_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     hEnergyE_vs_Nnucl_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     hEnergyE_vs_Nimf_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
 
     gStyle -> SetOptStat(1000100001);
     hEnergyA_vs_ImpactParameter_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hEnergyA_vs_ImpactParameter_targ ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hEnergyProj_vs_EnergyTarg ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+
     
     hNspect_vs_sumZ_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hNspect_vs_sumZ_targ ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+
+    hNspect_vs_Zb2 ->Draw("COLZ");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+
     
     hNspect_vs_Espect_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hNspect_vs_Espect_targ ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    //hNspect_vs_Espect_targ ->Draw("COLZ");
+    //canvas->Print("../output/histos/QA_abla_opt.pdf");
     gStyle -> SetOptStat(1000000001);
 
-    hImpactParameter_vs_Energy_targ ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hImpactParameter_vs_Energy_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-
-        hNspectT_vs_NspectP ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-        hNsumZT_vs_NsumZP ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
         hNnucl_vs_Nfrag_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-        hNnucl_vs_Nfrag_targ ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+
    
-
-
-    /*hNpart                     ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hNspec                     ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hNcoll                     ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hNpart_vs_ImpactParameter  ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hNspec_vs_ImpactParameter  ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hNcoll_vs_ImpactParameter  ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hNspec_vs_Npart            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hNspec_vs_Ncoll            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hNpart_vs_Ncoll            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hEcc1_vs_B                 ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hEcc2_vs_B                 ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hEcc3_vs_B                 ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hEcc4_vs_B                 ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");*/
     
     gPad->SetLogy();
     hNfrag                               ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     gPad->SetLogy(0);
     hEnergy                              ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     gPad->SetLogy();
-    hP                                   ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    hP                                   ->Draw("");
+    hPnucl -> SetLineColor(2);
+    hPnucl                                ->Draw("SAME");
+    hPimf -> SetLineColor(4);
+    hPimf                                ->Draw("SAME");
+    hPheavy -> SetLineColor(6);
+    hPheavy                               ->Draw("SAME");
+
+
+    auto legend = new TLegend(0.75,0.61,0.96,0.96);
+    legend -> AddEntry(hP, "all");
+    legend -> AddEntry(hPnucl, "nucleons");
+    legend -> AddEntry(hPimf, "IMF");
+    legend -> AddEntry(hPheavy, "Z>30");
+    //legend -> SetTextSize(0.045);
+    legend -> Draw();
+
+
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+   
+
+    hPTnucl                            ->Draw("COLZ");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+
+    hPz                                   ->Draw("COLZ");
+    hPznucl -> SetLineColor(2);
+    hPznucl                                ->Draw("SAME");
+    hPzimf -> SetLineColor(4);
+    hPzimf                                ->Draw("SAME");
+    hPzheavy -> SetLineColor(6);
+    hPzheavy                               ->Draw("SAME");
+
+    auto legend1 = new TLegend(0.75,0.61,0.96,0.96);
+    legend1 -> AddEntry(hPz, "all");
+    legend1 -> AddEntry(hPznucl, "nucleons");
+    legend1 -> AddEntry(hPzimf, "IMF");
+    legend1 -> AddEntry(hPzheavy, "Z>30");
+    //legend -> SetTextSize(0.045);
+    legend1 -> Draw();
+
+
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+
     hRapidity                            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    hPseudoRapidity                      ->Draw("COLZ");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    hPseudoRapidity_nucl                 ->Draw("COLZ");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     gPad->SetLogy(0);
+        hPT_vs_A                           ->Draw("COLZ");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     hNprotons_vs_Nneutrons               ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     hNfrag_vs_ImpactParameter            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
 
     hNfrag_vs_Energy                     ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     //hNfrag_vs_Energy_scaled              ->Draw("COLZ");
-    //canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    //canvas->Print("../output/histos/QA_abla_opt.pdf");
 
     hNfrag_vs_Rapidity                   ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
 
-    //hImpactParameter_vs_Energy           ->Draw("COLZ");
-    //canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    hImpactParameter_vs_Energy           ->Draw("COLZ");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
 
     hImpactParameter_vs_Energy_Fragment  ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     hImpactParameter_vs_Rapidity         ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     hRapidity_vs_Energy                  ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
     hPx_vs_Py                            ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
-    hPseudoRapidity                      ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf");
+    canvas->Print("../output/histos/QA_abla_opt.pdf");
+
     hPseudoRapidity_vs_A                 ->Draw("COLZ");
-    canvas->Print("../output/histos/Au2_12AGeV_20k_noMST.pdf)");
+    canvas->Print("../output/histos/QA_abla_opt.pdf)");
        
 
     TFile *fout = new TFile(output_dirname, "recreate");
     
     hImpactParameter           ->Write();
-    hNpart                     ->Write();
+   /* hNpart                     ->Write();
     hNspec                     ->Write();
     hNcoll                     ->Write();
     hNpart_vs_ImpactParameter  ->Write();
@@ -376,17 +370,18 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
     hNcoll_vs_ImpactParameter  ->Write();
     hNspec_vs_Npart            ->Write();
     hNspec_vs_Ncoll            ->Write();
-    hNpart_vs_Ncoll            ->Write();
-    hEcc1_vs_B                 ->Write();
-    hEcc2_vs_B                 ->Write();
-    hEcc3_vs_B                 ->Write();
-    hEcc4_vs_B                 ->Write();
+    hNpart_vs_Ncoll            ->Write();*/
+    //hEcc1_vs_B                 ->Write();
+    //hEcc2_vs_B                 ->Write();
+    //hEcc3_vs_B                 ->Write();
+    //hEcc4_vs_B                 ->Write();
     
     gPad->SetLogy();
     hNfrag                               ->Write();
     gPad->SetLogy(0);
     hEnergy                              ->Write();
     hP                                   ->Write();
+    hPz                                   ->Write();
     hRapidity                            ->Write();
     hNprotons_vs_Nneutrons               ->Write();
     hNfrag_vs_ImpactParameter            ->Write();
@@ -399,22 +394,27 @@ void FragmentationInput(char* input_dirname, char* output_dirname, Int_t files, 
     hRapidity_vs_Energy                  ->Write();
     hPx_vs_Py                            ->Write();
     hPseudoRapidity                      ->Write();
+    hPseudoRapidity_nucl                 -> Write();
     hPseudoRapidity_vs_A                 ->Write();
+    hPTnucl                              ->Write();
+    hPT_vs_A                             ->Write();
+
 
     hEnergyA_vs_ImpactParameter_proj -> Write();
-    hEnergyA_vs_ImpactParameter_targ -> Write();
+    //hEnergyA_vs_ImpactParameter_targ -> Write();
      hNspect_vs_Espect_proj -> Write();
-   hNspect_vs_Espect_targ -> Write();
+   //hNspect_vs_Espect_targ -> Write();
     hNspect_vs_sumZ_proj -> Write();
-   hNspect_vs_sumZ_targ -> Write();
-    hEnergyProj_vs_EnergyTarg        -> Write();
-    hImpactParameter_vs_Energy_targ   -> Write();
-   hImpactParameter_vs_Energy_proj   -> Write();
+    hNspect_vs_Zb2 -> Write();
+   //hNspect_vs_sumZ_targ -> Write();
+    //hEnergyProj_vs_EnergyTarg        -> Write();
+    //hImpactParameter_vs_Energy_targ   -> Write();
+   //hImpactParameter_vs_Energy_proj   -> Write();
 
-    hNspectT_vs_NspectP -> Write();
-        hNsumZT_vs_NsumZP -> Write();;
+    //hNspectT_vs_NspectP -> Write();
+        //hNsumZT_vs_NsumZP -> Write();;
         hNnucl_vs_Nfrag_proj -> Write();
-        hNnucl_vs_Nfrag_targ -> Write();
+        //hNnucl_vs_Nfrag_targ -> Write();
 
         hEnergyE_vs_sumZ_proj -> Write();
         hEnergyE_vs_Nnucl_proj -> Write();
