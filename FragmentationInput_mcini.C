@@ -1,7 +1,10 @@
-void FragmentationInput_mcini(char* input_dirname, char* output_dirname, Int_t files, Int_t A, Int_t P_beam)
+#include <stdio.h>
+#include <string.h>
+
+void FragmentationInput_mcini(char* input_dirname, char* output_dirname, char* output_dirname_pdf, char* output_dirname_pdf_begin, char* output_dirname_pdf_end, Int_t files, Int_t A, Int_t P_beam)
 {
 	TChain* fChain=new TChain("events");
-    fChain->Add(Form("%s/mcini_auau_Ablaxx_option_12AGeV.root", input_dirname));
+    fChain->Add(input_dirname);
     //for (int i = 1; i <= files; i++) {fChain->Add(Form("%s/dcmqgsm_%d.root", input_dirname, i));}
     //TFile* ReadFile = new TFile("../input/QA_abla_opt.root");
 
@@ -231,52 +234,51 @@ void FragmentationInput_mcini(char* input_dirname, char* output_dirname, Int_t f
 		
 	}
 
-
     TCanvas* canvas = new TCanvas("canvas");
     gPad->SetTickx();
     gPad->SetTicky();
     hImpactParameter           ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf(");
+    canvas->Print(output_dirname_pdf_begin);
 
     gPad->SetLogz();
 
     
     hEnergyE_vs_sumZ_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     hEnergyE_vs_Nnucl_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     hEnergyE_vs_Nimf_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
     gStyle -> SetOptStat(1000100001);
     hEnergyA_vs_ImpactParameter_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
     
     hNspect_vs_sumZ_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
     hNspect_vs_Zb2 ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
     
     hNspect_vs_Espect_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     //hNspect_vs_Espect_targ ->Draw("COLZ");
-    //canvas->Print("../output/histos/QA_abla_opt.pdf");
+    //canvas->Print(output_dirname_pdf);
     gStyle -> SetOptStat(1000000001);
 
         hNnucl_vs_Nfrag_proj ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
    
     
     gPad->SetLogy();
     hNfrag                               ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     gPad->SetLogy(0);
     hEnergy                              ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     gPad->SetLogy();
     hP                                   ->Draw("");
     hPnucl -> SetLineColor(2);
@@ -296,11 +298,11 @@ void FragmentationInput_mcini(char* input_dirname, char* output_dirname, Int_t f
     legend -> Draw();
 
 
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
    
 
     hPTnucl                            ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
     hPz                                   ->Draw("COLZ");
     hPznucl -> SetLineColor(2);
@@ -319,44 +321,45 @@ void FragmentationInput_mcini(char* input_dirname, char* output_dirname, Int_t f
     legend1 -> Draw();
 
 
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
     hRapidity                            ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     hPseudoRapidity                      ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     hPseudoRapidity_nucl                 ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     gPad->SetLogy(0);
         hPT_vs_A                           ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     hNprotons_vs_Nneutrons               ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     hNfrag_vs_ImpactParameter            ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
     hNfrag_vs_Energy                     ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     //hNfrag_vs_Energy_scaled              ->Draw("COLZ");
-    //canvas->Print("../output/histos/QA_abla_opt.pdf");
+    //canvas->Print(output_dirname_pdf);
 
     hNfrag_vs_Rapidity                   ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
     hImpactParameter_vs_Energy           ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
     hImpactParameter_vs_Energy_Fragment  ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     hImpactParameter_vs_Rapidity         ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     hRapidity_vs_Energy                  ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
     hPx_vs_Py                            ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf");
+    canvas->Print(output_dirname_pdf);
 
     hPseudoRapidity_vs_A                 ->Draw("COLZ");
-    canvas->Print("../output/histos/QA_abla_opt.pdf)");
+
+    canvas->Print(output_dirname_pdf_end);
        
 
     TFile *fout = new TFile(output_dirname, "recreate");
